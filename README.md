@@ -1,8 +1,20 @@
 # Cairn
 
+[![License](https://img.shields.io/github/license/ziyilam3999/cairn)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Git%20Bash%20on%20Windows-blue)](https://gitforwindows.org)
+[![Latest release](https://img.shields.io/github/v/release/ziyilam3999/cairn)](https://github.com/ziyilam3999/cairn/releases)
+
 Cairn is a lightweight capture layer for [Claude Code](https://claude.com/claude-code). It watches every tool call your session makes, writes failures and lesson markers (`#cairn-stone: ...`) to a local JSONL store, and builds up a per-session record you can grep, index, or feed back to the model.
 
 It is implemented as four small bash scripts wired into Claude Code's hook system. There is no daemon, no network call, no telemetry. Everything stays on disk under `~/.claude/cairn/`.
+
+```mermaid
+graph LR
+    CC[Claude Code session] -->|5 hooks| H[4 cairn hook scripts]
+    H -->|tool failures<br/>orphan Pre/Post pairs| S[~/.claude/cairn/<br/>local JSONL store]
+    H -->|lesson markers<br/>#cairn-stone| S
+    H -->|session summary| S
+```
 
 ## Prerequisites
 

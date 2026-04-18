@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  shell-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: bash syntax check on all hooks and scripts
+        run: |
+          for f in hooks/*.sh scripts/*.sh; do
+            echo "bash -n $f"
+            bash -n "$f"
+          done
+      - name: shellcheck (informational — warnings are fine, errors fail)
+        run: |
+          shellcheck --severity=error hooks/*.sh scripts/*.sh
